@@ -1,0 +1,81 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100..900;1,100..900&display=swap');
+
+:root {
+  --color-brand: #009076;
+  --color-brand-rgb: 0, 144, 118;
+  --color-brand-light: #4db19f;
+  --color-brand-light-rgb: 77, 177, 159;
+  --color-brand-dark: #004437;
+  --color-brand-dark-rgb: 0, 68, 55;
+  --mdb-input-focus-border-color: var(--color-brand);
+  --mdb-input-focus-label-color: var(--color-brand);
+}
+
+* {
+  font-family: 'Poppins', sans-serif;
+}
+
+.fw-bolder {
+  font-weight: 800 !important;
+}
+
+.fw-black {
+  font-weight: 900 !important;
+}
+
+.bg-brand {
+  --mdb-bg-opacity: 1;
+  background-color: rgba(var(--color-brand-rgb), var(--mdb-bg-opacity)) !important;
+}
+
+.text-brand {
+  --mdb-text-opacity: 1;
+  color: rgba(var(--color-brand-rgb), var(--mdb-text-opacity)) !important;
+}
+
+.text-bg-brand {
+  color: #fff !important;
+  background-color: RGBA(var(--color-brand-rgb), var(--mdb-bg-opacity, 1)) !important;
+}
+
+.btn-brand {
+  --mdb-btn-bg: var(--color-brand);
+  --mdb-btn-color: #fff;
+  --mdb-btn-border-color: var(--color-brand);
+  --mdb-btn-box-shadow: 0 4px 9px -4px var(--color-brand-light);
+  --mdb-btn-hover-bg: var(--color-brand-light);
+  --mdb-btn-hover-color: #fff;
+  --mdb-btn-hover-border-color: var(--color-brand-light);
+  --mdb-btn-focus-bg: var(--color-brand-light);
+  --mdb-btn-focus-color: #fff;
+  --mdb-btn-focus-shadow-rgb: var(--color-brand-light-rgb);
+  --mdb-btn-active-bg: var(--color-brand-light);
+  --mdb-btn-active-color: #fff;
+  --mdb-btn-active-border-color: var(--color-brand-light);
+  --mdb-btn-active-shadow: 0 8px 9px -4px rgba(var(--mdb-box-shadow-color-rgb), 0.15),
+    0 4px 18px 0 rgba(var(--mdb-box-shadow-color-rgb), 0.1);
+  --mdb-btn-box-shadow-state: 0 8px 9px -4px rgba(56, 107, 192, 0.3),
+    0 4px 18px 0 rgba(56, 107, 192, 0.2);
+  --mdb-btn-disabled-color: #fff;
+  --mdb-btn-disabled-bg: var(--color-brand-dark);
+  --mdb-btn-disabled-border-color: var(--color-brand-dark);
+}
+
+.form-outline {
+  --mdb-form-outline-select-notch-border-color: var(--color-brand);
+}
+
+.select-wrapper {
+  --mdb-form-outline-select-label-color: var(--color-brand);
+}
+
+.select-option {
+  --mdb-form-outline-select-option-selected-active-bg: rgba(var(--color-brand-light-rgb), 0.45);
+  --mdb-form-outline-select-option-selected-hover-bg: rgba(var(--color-brand-light-rgb), 0.45);
+  --mdb-form-outline-select-option-selected-bg: rgba(var(--color-brand-light-rgb), 0.3);
+}
+
+.input-group > .form-control:focus {
+  border-color: var(--color-brand);
+  box-shadow: inset 0 0 0 1px var(--color-brand);
+}

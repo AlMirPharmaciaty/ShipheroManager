@@ -1,0 +1,5 @@
+@import '@/assets/css/base.css';
+
+.alert {
+  z-index: 99999;
+}
