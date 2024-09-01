@@ -14,7 +14,7 @@ class PermissionController:
     def __init__(self, db: Session):
         self.db = db
 
-    def get_permission(self, permission_id: str):
+    def read(self, permission_id: str):
         return self.db.query(Permission).filter(Permission.id == permission_id).first()
 
     def is_permission_duplicate(self,
@@ -29,7 +29,7 @@ class PermissionController:
             return True
         return False
 
-    def get_permissions(
+    def read_many(
         self,
         query: str = None,
         roles: str = None,
@@ -92,7 +92,7 @@ class PermissionController:
                new_details: PermissionUpdate):
         """Update a permission details"""
         try:
-            permission = self.get_permission(permission_id=permission_id)
+            permission = self.read(permission_id=permission_id)
             if not permission:
                 raise Exception('Permission not found.')
 
@@ -112,7 +112,7 @@ class PermissionController:
     def delete(self, permission_id: str):
         """Permanently delete a permission"""
         try:
-            permission = self.get_permission(permission_id=permission_id)
+            permission = self.read(permission_id=permission_id)
             if not permission:
                 raise Exception('Permission not found.')
 

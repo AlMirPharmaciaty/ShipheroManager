@@ -128,7 +128,7 @@ onMounted(() => {
   z-index: 10;
 }
 
-.sidenav-link.router-link-exact-active i {
+.sidenav-link.active i {
   color: #fff !important;
 }
 

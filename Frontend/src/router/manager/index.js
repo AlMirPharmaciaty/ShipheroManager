@@ -1,5 +1,5 @@
-import MainLayout from '@/layouts/MainLayout.vue'
 import { manager } from '@/apis'
+import MainLayout from '@/layouts/MainLayout.vue'
 import roles from './roles'
 import users from './users'
 import permissions from './permissions'

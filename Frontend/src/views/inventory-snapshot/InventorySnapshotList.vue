@@ -1,14 +1,14 @@
 <template>
   <ViewContainer>
-    <template v-slot:actions v-if="canCreatePermission">
-      <Action
+    <template v-slot:actions v-if="canCreateSnapshot">
+      <!-- <Action
         type="modal"
-        modal-id="create-permission"
-        name="Add Permission"
+        modal-id="create-role"
+        name="Create Role"
         class="btn btn-brand"
         icon="plus"
       />
-      <CreatePermissionModal :is-coming-from-data-table="true" :data-table-func="getPermissions" />
+      <CreateRoleModal :is-coming-from-data-table="true" :data-table-func="getInventorySnapshots" /> -->
     </template>
     <template v-slot:body>
       <div
@@ -19,18 +19,16 @@
             v-model="searchQuery"
             id="search"
             label="Search"
-            @keyup.enter="getPermissions"
+            @keyup.enter="getInventorySnapshots"
           />
         </div>
         <div>
           <SelectField
-            id="roles"
-            label="Roles"
+            id="inventory-snapshot-status"
+            label="Status"
             :multiple="true"
-            :options="rolesFilterOptions"
-            v-model="rolesFilter"
-            :searchable="true"
-            :search-function="getRoles"
+            :options="statusFilterOptions"
+            v-model="statusFilter"
           />
         </div>
         <div>
@@ -50,7 +48,7 @@
           :actions-enabled="isActionsEnabled"
           :data-actions="dataActions"
           :data-action-modals="dataActionModals"
-          :data-table-func="getPermissions"
+          :data-table-func="getInventorySnapshots"
         />
       </div>
       <div class="card card-body px-1 px-md-3 px-lg-4 py-3 mt-3 gap-3 text-center">
@@ -60,7 +58,7 @@
           :dataset-length="dataset.length"
           :total="total"
           :filtered="filtered"
-          label="Permissions"
+          label="Snapshots"
           :is-loading="isDataLoading"
         />
       </div>
@@ -70,7 +68,6 @@
 
 <script setup>
 import { ref, watchEffect } from 'vue'
-import { useRoute } from 'vue-router'
 
 import { APIs } from '@/apis'
 import ViewContainer from '@/views/ViewContainer.vue'
@@ -78,24 +75,20 @@ import DataTable from '@/components/DataTable.vue'
 import InputField from '@/components/InputField.vue'
 import SelectField from '@/components/SelectField.vue'
 import MyButton from '@/components/MyButton.vue'
-import Action from '@/components/Action.vue'
+import PaginationWrapper from '@/components/PaginationWrapper.vue'
 import { isUserAuthorized } from '@/composables/auth-manager'
 import { fetchData } from '@/composables/data-fetcher'
-import EditPermissionModal from './EditPermissionModal.vue'
-import DeletePermissionModal from './DeletePermissionModal.vue'
-import CreatePermissionModal from './CreatePermissionModal.vue'
-import PaginationWrapper from '@/components/PaginationWrapper.vue'
+import { notify } from '@/composables/bootstrap-utils'
 
 const columns = [
-  { label: 'Id', field: 'id', key: true, wrapper: 'text-center', display: false, sortable: true },
-  { label: 'Permission', field: 'name', wrapper: 'text-center', sortable: true },
+  { label: 'Id', field: 'id', key: true, wrapper: 'text-center', sortable: true },
+  { label: 'Snapshot Id', field: 'snapshot_id', wrapper: 'text-center', sortable: true },
   {
-    label: 'Roles',
-    field: 'role_count',
+    label: 'Status',
+    field: 'status',
     wrapper: 'text-center',
-    type: 'component',
-    component: Action,
-    sortable: false
+    type: 'html',
+    sortable: true
   },
   {
     label: 'Created at',
@@ -113,9 +106,6 @@ const columns = [
   }
 ]
 
-const route = useRoute()
-const routeQuery = route.query
-
 const dataset = ref([])
 const isDataLoading = ref(true)
 const searchQuery = ref('')
@@ -124,47 +114,40 @@ const sortOrder = ref('desc')
 const sortOptions = columns.filter((col) => col.sortable)
 const currentPage = ref(1)
 const perPage = ref(10)
-const rolesFilter = ref(routeQuery.roles ? routeQuery.roles.split(',') : [])
-const rolesFilterOptions = ref([])
+const statusFilter = ref([])
+const statusFilterOptions = [
+  { label: 'Enqueued', field: 'enqueued', color: 'primary' },
+  { label: 'Pending', field: 'pending', color: 'info' },
+  { label: 'Processing', field: 'processing', color: 'warning' },
+  { label: 'Success', field: 'success', color: 'success' }
+]
 const total = ref(0)
 const filtered = ref(0)
 const dataActions = ref([])
-const dataActionModals = [EditPermissionModal, DeletePermissionModal]
+const dataActionModals = []
 
 function toggleSortOrder() {
   sortOrder.value = sortOrder.value == 'desc' ? 'asc' : 'desc'
 }
 
-function getRoles(query = '', roles = '') {
-  fetchData(APIs.roleList.url, true, { query: query, roles: roles }).then((response) => {
-    response.data.forEach((role) => {
-      if (!rolesFilterOptions.value.find((p) => p.field == role.id)) {
-        rolesFilterOptions.value.push({ label: role.name, field: role.id })
-      }
-    })
-  })
-}
-getRoles()
-
-async function getPermissions() {
+async function getInventorySnapshots() {
   isDataLoading.value = true
   dataActions.value = []
   try {
     const params = {
       query: searchQuery.value,
-      roles: rolesFilter.value,
       page: currentPage.value,
       limit: perPage.value,
       sort_by: sortBy.value,
       sort_order: sortOrder.value
     }
-    const response = await fetchData(APIs.permissionList.url, true, params)
-    const permissions = response.data
-    permissions.forEach((permission) => {
-      permission.role_count = renderRoles(permission)
-      setDataActions(permission)
+    const response = await fetchData(APIs.inventorySnapshotList.url, true, params)
+    const snapshots = response.data
+    snapshots.forEach((snapshot) => {
+      snapshot.status = renderStatus(snapshot.status)
+      setDataActions(snapshot)
     })
-    dataset.value = permissions
+    dataset.value = snapshots
     total.value = response.pagination.total
     filtered.value = response.pagination.filtered
   } finally {
@@ -172,43 +155,40 @@ async function getPermissions() {
   }
 }
 
-watchEffect(() => getPermissions())
+watchEffect(() => getInventorySnapshots())
 
-const canCreatePermission = isUserAuthorized(APIs.permissionCreate.permission)
+const canCreateSnapshot = isUserAuthorized(APIs.inventorySnapshotCreate.permission)
 const isActionsEnabled = ref(false)
-function setDataActions(permission) {
+function setDataActions(snapshot) {
   const actions = []
-  if (isUserAuthorized(APIs.permissionEdit.permission)) {
+  if (isUserAuthorized(APIs.inventorySnapshotEdit.permission)) {
     actions.push({
-      name: 'Edit',
-      type: 'modal',
-      modalId: 'edit-permission',
-      icon: 'pen',
-      class: 'text-primary'
-    })
-  }
-  if (isUserAuthorized(APIs.permissionDelete.permission)) {
-    actions.push({
-      name: 'Delete',
-      type: 'modal',
-      modalId: 'delete-permission',
-      icon: 'trash-can',
-      class: 'text-danger'
+      name: 'Update status',
+      type: 'button',
+      icon: 'rotate',
+      class: 'text-warning',
+      buttonFunc: updateStatus,
+      'data-id': snapshot.id
     })
   }
   if (actions.length > 0) isActionsEnabled.value = true
-  dataActions.value.push({ id: permission.id, actions: actions })
+  dataActions.value.push({ id: snapshot.id, actions: actions })
 }
 
-function renderRoles(permission) {
-  return {
-    type: 'route',
-    routeLink: {
-      name: 'role-list',
-      query: { perms: permission.id }
-    },
-    name: permission.roles.length,
-    class: 'btn btn-link btn-rounded'
+function renderStatus(status) {
+  const color = statusFilterOptions.find((s) => s.field == status)
+  return `<span class="badge badge-${color.color}">${status}</span>`
+}
+
+function updateStatus(e) {
+  try {
+    var snapshotDbID = e.target.getAttribute('data-id')
+    if (!snapshotDbID) {
+      snapshotDbID = e.target.parentElement.getAttribute('data-id')
+    }
+    console.log(snapshotDbID)
+  } catch (error) {
+    notify('Failed to update status', 'danger')
   }
 }
 </script>

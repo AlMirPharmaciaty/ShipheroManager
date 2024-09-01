@@ -24,7 +24,7 @@ def get_all_users(query: str = None,
     try:
         controller = UserController(db=db)
         response = CustomResponse()
-        response.data, response.pagination = controller.get_users(
+        response.data, response.pagination = controller.read_many(
             query=query,
             page=page,
             limit=limit,
@@ -48,7 +48,7 @@ def get_user(user_id: str,
              _=Depends(Authorize(permission="user_read"))):
     try:
         controller = UserController(db=db)
-        user = controller.get_user(user_id=user_id, exclude_deleted=False)
+        user = controller.read(user_id=user_id, exclude_deleted=False)
         response = CustomResponse()
         response.data = user
         response.success = True

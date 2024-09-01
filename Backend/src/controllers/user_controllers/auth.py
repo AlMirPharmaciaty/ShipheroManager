@@ -28,7 +28,7 @@ class AuthController:
         Authenticate user credentials
         """
         controller = UserController(db=db)
-        user = controller.get_user(email=email)
+        user = controller.read(email=email)
         if not user:
             return False
         if not verify(password, user.password):
@@ -59,7 +59,7 @@ class AuthController:
         except InvalidTokenError as e:
             raise credentials_exception from e
         controller = UserController(db=db)
-        user = controller.get_user(user_id=user_id)
+        user = controller.read(user_id=user_id)
         if not user:
             raise credentials_exception
         return user

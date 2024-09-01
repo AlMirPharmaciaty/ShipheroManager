@@ -3,3 +3,8 @@
 .alert {
   z-index: 99999;
 }
+
+.table .badge {
+  font-size: 0.9rem !important;
+  font-weight: 500 !important;
+}

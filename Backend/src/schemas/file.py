@@ -21,8 +21,11 @@ class FileRead(FileBase):
     created_at: datetime
     updated_at: datetime
     deleted: bool
+
+
+class FileReadWithRelation(FileBase):
     user: UserRead
 
 
 class FileResponseModel(CustomResponse):
-    data: FileRead | None = None
+    data: FileReadWithRelation | list[FileReadWithRelation] | None = None

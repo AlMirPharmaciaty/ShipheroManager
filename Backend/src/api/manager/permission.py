@@ -23,7 +23,7 @@ def get_permissions(query: str = None,
                     _=Depends(Authorize(permission="permission_read"))):
     try:
         controller = PermissionController(db=db)
-        data, pagination = controller.get_permissions(
+        data, pagination = controller.read_many(
             query=query,
             roles=roles,
             perms=perms,

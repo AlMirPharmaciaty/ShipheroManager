@@ -21,6 +21,8 @@ export const APIs = {
     url: BASE_URL + '/avatar',
     method: 'GET'
   },
+
+  // Auth APIs
   login: {
     url: BASE_URL + '/auth/login',
     method: 'POST'
@@ -29,6 +31,8 @@ export const APIs = {
     url: BASE_URL + '/auth/register',
     method: 'POST'
   },
+
+  // User Account APIs
   accountUpdate: {
     url: BASE_URL + '/user',
     method: 'PUT'
@@ -37,6 +41,8 @@ export const APIs = {
     url: BASE_URL + '/user',
     method: 'DELETE'
   },
+
+  // User Manager APIs
   userList: {
     url: manager.userManager.url + '/all',
     method: 'GET',
@@ -57,6 +63,8 @@ export const APIs = {
     method: 'DELETE',
     permission: 'user_delete'
   },
+
+  // Role Manager APIs
   roleList: {
     url: manager.roleManager.url,
     method: 'GET',
@@ -77,6 +85,8 @@ export const APIs = {
     method: 'DELETE',
     permission: 'role_delete'
   },
+
+  // Permission Manager APIs
   permissionList: {
     url: manager.permissionManager.url,
     method: 'GET',
@@ -96,5 +106,22 @@ export const APIs = {
     url: manager.permissionManager.url,
     method: 'DELETE',
     permission: 'permission_delete'
+  },
+
+  // Shiphero Inventory Snapshot APIs
+  inventorySnapshotList: {
+    url: BASE_URL + '/inventory-snapshot',
+    method: 'GET',
+    permission: 'inventory_snapshot_read'
+  },
+  inventorySnapshotCreate: {
+    url: BASE_URL + '/inventory-snapshot',
+    method: 'POST',
+    permission: 'inventory_snapshot_create'
+  },
+  inventorySnapshotEdit: {
+    url: BASE_URL + '/inventory-snapshot',
+    method: 'PATCH',
+    permission: 'inventory_snapshot_create'
   }
 }

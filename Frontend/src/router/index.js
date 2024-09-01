@@ -3,9 +3,10 @@ import { createRouter, createWebHistory } from 'vue-router'
 import AuthLayout from '@/layouts/AuthLayout.vue'
 import MainLayout from '@/layouts/MainLayout.vue'
 import { isUserAuthorized, isUserAuthenticated } from '@/composables/auth-manager'
+import { notify } from '@/composables/bootstrap-utils'
 
 import manager from './manager'
-import { notify } from '@/composables/bootstrap-utils'
+import inventorySnapshot from './shiphero/inventory-snapshot'
 
 const routes = [
   {
@@ -46,6 +47,7 @@ const routes = [
   }
 ]
 
+routes.push(inventorySnapshot)
 routes.push(manager)
 routes.push({
   path: '/:catchAll(.*)',

@@ -32,7 +32,7 @@
             </li>
             <li>
               <Action
-                @click="logOutUser"
+                :button-func="logOutUser"
                 class="dropdown-item"
                 icon="arrow-right-from-bracket fa-regular"
                 name="Logout"

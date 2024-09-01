@@ -16,7 +16,7 @@ class RoleController:
     def __init__(self, db: Session):
         self.db = db
 
-    def get_role(self, role_id: str):
+    def read(self, role_id: str):
         return self.db.query(Role).filter(Role.id == role_id).first()
 
     def is_role_duplicate(self, role_name: str, role_id: str | None = None):
@@ -28,7 +28,7 @@ class RoleController:
             return True
         return False
 
-    def get_roles(
+    def read_many(
         self,
         query: str = None,
         roles: str = None,
@@ -110,7 +110,7 @@ class RoleController:
     def update(self, role_id: str, new_details: RoleUpdate):
         """Update a role details"""
         try:
-            role = self.get_role(role_id=role_id)
+            role = self.read(role_id=role_id)
             if not role:
                 raise Exception('Role not found.')
 
@@ -131,7 +131,7 @@ class RoleController:
     def delete(self, role_id: str):
         """Permanently delete a role"""
         try:
-            role = self.get_role(role_id=role_id)
+            role = self.read(role_id=role_id)
             if not role:
                 raise Exception('Role not found.')
 

@@ -7,7 +7,7 @@
     <i v-if="icon" :class="`fa-fw fa-${iconType} fa-${icon} fa-fw me-2`"></i>
     <span v-text="name"></span>
   </a>
-  <a v-else-if="type == 'button'" role="button" ref="action">
+  <a v-else-if="type == 'button'" role="button" ref="action" @click="buttonFunc">
     <i v-if="icon" :class="`fa-fw fa-${iconType} fa-${icon} fa-fw me-2`"></i>
     <span v-text="name"></span>
   </a>
@@ -27,7 +27,8 @@ const props = defineProps({
   modalId: {},
   icon: {},
   rippleColor: {},
-  iconType: { default: 'solid' }
+  iconType: { default: 'solid' },
+  buttonFunc: {}
 })
 
 onMounted(() => {

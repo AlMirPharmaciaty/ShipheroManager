@@ -24,7 +24,7 @@ def get_roles(query: str = None,
     try:
         controller = RoleController(db=db)
         response = CustomResponse()
-        response.data, response.pagination = controller.get_roles(
+        response.data, response.pagination = controller.read_many(
             query=query,
             roles=roles,
             perms=perms,

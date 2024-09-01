@@ -17,10 +17,10 @@ class UserController:
     def __init__(self, db: Session):
         self.db = db
 
-    def get_user(self,
-                 user_id: str = None,
-                 email: str = None,
-                 exclude_deleted: bool = True):
+    def read(self,
+             user_id: str = None,
+             email: str = None,
+             exclude_deleted: bool = True):
         """Get a single user"""
         user = self.db.query(User)
         if exclude_deleted:
@@ -41,7 +41,7 @@ class UserController:
             return True
         return False
 
-    def get_users(
+    def read_many(
         self,
         query: str = None,
         exclude_deleted: bool = True,
@@ -102,8 +102,8 @@ class UserController:
             exclude_deleted = True
             if 'deleted' in jsonable_encoder(new_details):
                 exclude_deleted = False
-            user = self.get_user(user_id=user_id,
-                                 exclude_deleted=exclude_deleted)
+            user = self.read(user_id=user_id,
+                             exclude_deleted=exclude_deleted)
             if not user:
                 raise Exception("User not found")
 
@@ -163,7 +163,7 @@ class UserController:
     def delete(self, user_id: str):
         """Soft delete a user"""
         try:
-            user = self.get_user(user_id=user_id)
+            user = self.read(user_id=user_id)
             if not user:
                 raise Exception("User doesn't exist or is already deleted.")
 

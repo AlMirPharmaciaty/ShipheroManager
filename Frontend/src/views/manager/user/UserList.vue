@@ -49,37 +49,22 @@
         />
       </div>
       <div class="card card-body px-1 px-md-3 px-lg-4 py-3 mt-3 gap-3 text-center">
-        <div class="row row-gap-4 align-items-center">
-          <div class="col-lg-3 col-12"><p class="mb-0" v-text="dataInfo"></p></div>
-          <div class="col-lg-6 col-12 d-flex justify-content-center">
-            <div>
-              <Pagination
-                :current-page="currentPage"
-                :total="filtered"
-                :per-page="perPage"
-                @page-event="changePage"
-                :disabled="isDataLoading"
-              />
-            </div>
-          </div>
-          <div class="col-lg-3 col-12 d-flex justify-content-center">
-            <div>
-              <SelectField
-                v-model="perPage"
-                id="perPage"
-                label="Users per page"
-                :options="perPageOptions"
-              />
-            </div>
-          </div>
-        </div>
+        <PaginationWrapper
+          v-model:current-page="currentPage"
+          v-model:per-page="perPage"
+          :dataset-length="dataset.length"
+          :total="total"
+          :filtered="filtered"
+          label="Users"
+          :is-loading="isDataLoading"
+        />
       </div>
     </template>
   </ViewContainer>
 </template>
 
 <script setup>
-import { computed, ref, watchEffect } from 'vue'
+import { ref, watchEffect } from 'vue'
 import { useRoute } from 'vue-router'
 
 import { APIs } from '@/apis'
@@ -88,11 +73,11 @@ import DataTable from '@/components/DataTable.vue'
 import InputField from '@/components/InputField.vue'
 import SelectField from '@/components/SelectField.vue'
 import MyButton from '@/components/MyButton.vue'
-import Pagination from '@/components/Pagination.vue'
+import PaginationWrapper from '@/components/PaginationWrapper.vue'
 import Action from '@/components/Action.vue'
 import { isUserAuthorized } from '@/composables/auth-manager'
 import { fetchData } from '@/composables/data-fetcher'
-import { getDataTableInfo } from '@/composables/get-datatable-info'
+
 import deleteUserModal from './DeleteUserModal.vue'
 import UserListUserColView from './UserListUserColView.vue'
 
@@ -159,21 +144,11 @@ const currentPage = ref(1)
 const total = ref(0)
 const filtered = ref(0)
 const perPage = ref(10)
-const perPageOptions = [
-  { label: '10', field: 10 },
-  { label: '25', field: 25 },
-  { label: '50', field: 50 },
-  { label: '100', field: 100 }
-]
 const dataActions = ref([])
 const dataActionModals = [deleteUserModal]
 
 function toggleSortOrder() {
   sortOrder.value = sortOrder.value == 'desc' ? 'asc' : 'desc'
-}
-
-function changePage(nextPage) {
-  currentPage.value = nextPage
 }
 
 function getRoles(query = '', roles = '') {
@@ -214,17 +189,6 @@ async function getUsers() {
     isDataLoading.value = false
   }
 }
-
-const dataInfo = computed(() =>
-  getDataTableInfo(
-    dataset.value.length,
-    perPage.value,
-    currentPage.value,
-    total.value,
-    filtered.value,
-    'users'
-  )
-)
 
 watchEffect(() => getUsers())
 
@@ -270,7 +234,7 @@ function renderRoles(role) {
       query: { roles: role.id }
     },
     name: role.name,
-    class: 'fs-6 fw-medium badge badge-success text-brand'
+    class: 'badge badge-success text-brand'
   }
 }
 </script>

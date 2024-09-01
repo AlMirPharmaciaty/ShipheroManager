@@ -8,8 +8,8 @@ from src.api.manager.role import role_manager
 from src.api.manager.permission import permission_manager
 
 from src.api.etl import etl
-from src.api.inventory_snapshot import inventory_snapshot
 from src.api.file import file
+from src.api.shiphero.inventory_snapshot import inventory_snapshot
 
 routes = APIRouter()
 

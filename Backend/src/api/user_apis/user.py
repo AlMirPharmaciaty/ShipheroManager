@@ -19,7 +19,7 @@ def get_user(db: Session = Depends(get_db),
     """API for user to get their details"""
     try:
         controller = UserController(db=db)
-        user = controller.get_user(user_id=current_user.id)
+        user = controller.read(user_id=current_user.id)
         if not user:
             raise Exception('User not found.')
         response = CustomResponse()
