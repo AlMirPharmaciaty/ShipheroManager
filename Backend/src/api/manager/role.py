@@ -59,7 +59,7 @@ def create_role(role: RoleCreate,
 
 
 @role_manager.put("/", response_model=RoleResponseModel)
-def update_role(role_id: str,
+def update_role(role_id: int,
                 new_details: RoleUpdate,
                 db: Session = Depends(get_db),
                 _=Depends(Authorize(permission="role_update"))):
@@ -78,7 +78,7 @@ def update_role(role_id: str,
 
 
 @role_manager.delete("/", response_model=RoleResponseModel)
-def delete_role(role_id: str,
+def delete_role(role_id: int,
                 db: Session = Depends(get_db),
                 _=Depends(Authorize(permission="role_delete"))):
     try:

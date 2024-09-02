@@ -4,11 +4,11 @@ from pydantic import BaseModel
 
 class RoleBase(BaseModel):
     name: str
-    permissions: list[str] | list[None] | None = None
+    permissions: list[int] | list[None] | None = None
 
 
 class RoleRead(BaseModel):
-    id: str
+    id: int
     name: str
     created_at: datetime
     updated_at: datetime

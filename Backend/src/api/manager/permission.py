@@ -57,7 +57,7 @@ def create_permission(permission: PermissionCreate,
 
 
 @permission_manager.put("/", response_model=PermissionResponseModel)
-def update_permission(permission_id: str,
+def update_permission(permission_id: int,
                       new_details: PermissionUpdate,
                       db: Session = Depends(get_db),
                       _=Depends(Authorize(permission="permission_update"))):
@@ -77,7 +77,7 @@ def update_permission(permission_id: str,
 
 
 @permission_manager.delete("/", response_model=PermissionResponseModel)
-def delete_permission(permission_id: str,
+def delete_permission(permission_id: int,
                       db: Session = Depends(get_db),
                       _=Depends(Authorize(permission="permission_delete"))):
     try:

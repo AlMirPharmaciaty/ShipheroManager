@@ -11,9 +11,9 @@ class RolePermission(Base):
 
     __tablename__ = "role_permissions"
 
-    role_id: Mapped[str] = mapped_column(ForeignKey(Role.id,
+    role_id: Mapped[int] = mapped_column(ForeignKey(Role.id,
                                                     ondelete='CASCADE'),
                                          primary_key=True)
-    permission_id: Mapped[str] = mapped_column(ForeignKey(Permission.id,
+    permission_id: Mapped[int] = mapped_column(ForeignKey(Permission.id,
                                                           ondelete='CASCADE'),
                                                primary_key=True)

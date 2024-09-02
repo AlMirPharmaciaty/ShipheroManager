@@ -5,13 +5,16 @@ const statusIcon = {
   warning: 'circle-exclaimation'
 }
 
-export function notify(message, color = 'success', delay = 5000) {
+export function notify(message, color = 'success', delay = 5000, loading = false) {
   document.querySelectorAll('.notification').forEach((i) => i.remove())
 
   const notification = document.createElement('div')
   notification.innerHTML = `
     <div class="d-flex justify-content-between gap-4">
-      <p class="mb-0"><i class="fa-solid fa-${statusIcon[color]} me-2"></i>${message}</p>
+      <p class="mb-0">
+        <i class="fa-solid fa-${loading ? `circle-notch fa-spin` : statusIcon[color]} me-2"></i>
+        <span>${message}</span>
+      </p>
       <button type="button" class="btn-close" data-mdb-dismiss="alert"></button>
     </div>
   `

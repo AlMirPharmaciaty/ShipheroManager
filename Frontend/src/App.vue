@@ -28,7 +28,7 @@ window.fetch = async (...args) => {
           hideModalAll()
           router.push({ name: 'dashboard' })
         }, 500)
-      return Promise.reject(response)
+      return Promise.reject(message)
     }
     return response
   } catch {

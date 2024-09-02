@@ -1,3 +1,4 @@
+import threading
 from fastapi import APIRouter, Depends
 from fastapi.exceptions import HTTPException
 from sqlalchemy.orm import Session
@@ -8,10 +9,10 @@ from src.models.shiphero.inventory_snapshot import InventorySnapshot
 from src.schemas.custom_response import CustomResponse
 from src.schemas.shiphero.inventory_snapshot import (
     InventorySnapshotCreate,
-    InventorySnapshotResponseModel,
-)
+    InventorySnapshotResponseModel)
 from src.controllers.user_controllers.auth import Authorize
-from src.controllers.shiphero.inventory_snapshot import InventorySnapshotController
+from src.controllers.shiphero.inventory_snapshot import (
+    InventorySnapshotController)
 
 inventory_snapshot = APIRouter()
 
@@ -37,7 +38,7 @@ def generate_inventory_snapshot(
 
 @inventory_snapshot.get('/', response_model=InventorySnapshotResponseModel)
 def get_all_snapshots(query: str = None,
-                      db_id: str = None,
+                      db_id: int = None,
                       status: str = None,
                       sort_by: str = "created_at",
                       sort_order: str = "desc",
@@ -65,20 +66,50 @@ def get_all_snapshots(query: str = None,
 
 
 @inventory_snapshot.patch("/", response_model=InventorySnapshotResponseModel)
-def update_snapshot(snapshot_db_id: str | None = None,
+def update_snapshot(snapshot_db_id: int | None = None,
                     db: Session = Depends(get_db),
-                    _: User = Depends(Authorize("inventory_snapshot_update"))):
-    """API to update snapshot status"""
+                    user: User = Depends(Authorize("inventory_snapshot_update"))):
+    """
+    API to update snapshot status
+    -   snapshot_db_id = database id, not shiphero id
+    -   If snapshot id given,
+        read and update if the snapshot status is not "success"
+    -   if snapshot id not given,
+        get and update all snapshots from database
+        where status is either "pending", "enqueued", or "processing"
+    """
     try:
-        controller = InventorySnapshotController(db=db)
+        controller = InventorySnapshotController(db=db, user=user)
         response = CustomResponse(success=True)
-        snapshot: InventorySnapshot = controller.read(snapshot_db_id)
-        if snapshot.status == "success":
-            response.data = snapshot
-            response.message = "Inventory snapshot is up to date"
-            return response
-        response.data = controller.update(snapshot_db_id)
-        response.message = "Successfully updated snapshot"
+        if snapshot_db_id:
+            snapshot: InventorySnapshot = controller.read(snapshot_db_id)
+            if snapshot.status in ["success", "error", "abort"]:
+                response.data = snapshot
+                response.message = "Inventory snapshot is up to date"
+            else:
+                response.data = controller.update(snapshot_db_id)
+                response.message = "Successfully updated snapshot"
+
+        else:
+            limit = 100
+            page = 1
+            status = "enqueued,pending,processing"
+            s, p = controller.read_many(status=status, limit=limit)
+            if p.filtered == 0:  # If no snapshot with given status
+                response.message = "All snapshots are up to date"
+            else:
+                snapshot_ids = [snapshot.id for snapshot in s]
+                next_page = p.filtered > len(s)  # check for more snapshots
+                while next_page:
+                    page += 1
+                    s, p = controller.read_many(status=status,
+                                                limit=limit, page=page)
+                    for snapshot in s:
+                        snapshot_ids.append(snapshot.id)
+                    next_page = p.filtered > len(snapshot_ids)
+                threading.Thread(target=controller.update_many,
+                                 args=(snapshot_ids,)).start()
+                response.message = f"Updating {p.filtered} snapshots"
         return response
 
     except Exception as e:

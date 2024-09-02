@@ -11,10 +11,10 @@ class File(BaseModel):
 
     __tablename__ = "files"
 
-    file_id: Mapped[str] = mapped_column(unique=True)
-    filename: Mapped[str]
-    url: Mapped[str] = mapped_column(Text)
+    file_id: Mapped[Optional[str]] = mapped_column(unique=True)
+    filename: Mapped[Optional[str]]
+    url: Mapped[Optional[str]] = mapped_column(Text)
     description: Mapped[Optional[str]] = mapped_column(Text)
     deleted: Mapped[bool] = mapped_column(default=False)
-    user_id: Mapped[str] = mapped_column(ForeignKey(User.id))
+    user_id: Mapped[int] = mapped_column(ForeignKey(User.id))
     user = relationship('User')

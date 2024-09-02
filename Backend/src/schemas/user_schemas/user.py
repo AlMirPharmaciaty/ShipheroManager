@@ -7,7 +7,7 @@ class UserBase(BaseModel):
 
 
 class UserRead(BaseModel):
-    id: str
+    id: int
     avatar: str
     username: str
     email: str
@@ -32,4 +32,4 @@ class UserUpdate(UserBase):
 
 class UserUpdateAdmin(UserUpdate):
     deleted: bool | None = None
-    roles: list[str] | list[None] | None = None
+    roles: list[int] | list[None] | None = None

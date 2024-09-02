@@ -43,7 +43,7 @@ def get_all_users(query: str = None,
 
 
 @user_manager.get("/", response_model=UserResponseModel)
-def get_user(user_id: str,
+def get_user(user_id: int,
              db: Session = Depends(get_db),
              _=Depends(Authorize(permission="user_read"))):
     try:
@@ -62,7 +62,7 @@ def get_user(user_id: str,
 
 
 @user_manager.put("/", response_model=UserResponseModel)
-def update_user(user_id: str,
+def update_user(user_id: int,
                 new_details: UserUpdateAdmin,
                 db: Session = Depends(get_db),
                 _=Depends(Authorize(permission="user_update"))):
@@ -80,7 +80,7 @@ def update_user(user_id: str,
 
 
 @user_manager.delete("/", response_model=UserResponseModel)
-def delete_user(user_id: str,
+def delete_user(user_id: int,
                 db: Session = Depends(get_db),
                 _=Depends(Authorize(permission="user_delete"))):
     try:

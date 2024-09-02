@@ -16,5 +16,5 @@ class ETLLog(BaseModel):
     success: Mapped[bool]
     description: Mapped[str] = mapped_column(Text)
     file_id: Mapped[Optional[str]] = mapped_column(ForeignKey(File.id))
-    user_id: Mapped[str] = mapped_column(ForeignKey(User.id))
+    user_id: Mapped[int] = mapped_column(ForeignKey(User.id))
     user = relationship('User')

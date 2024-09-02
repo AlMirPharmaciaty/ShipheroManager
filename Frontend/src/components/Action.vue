@@ -1,14 +1,14 @@
 <template>
   <RouterLink :to="routeLink" v-if="type == 'route'" ref="action" active-class="active">
-    <i v-if="icon" :class="`fa-fw fa-${iconType} fa-${icon} fa-fw me-2`"></i>
+    <i v-if="icon" :class="`fa-fw fa-${iconType} fa-${icon} me-2`"></i>
     <span v-text="name"></span>
   </RouterLink>
   <a v-else-if="type == 'modal'" @click="showModal(modalId)" role="button" ref="action">
-    <i v-if="icon" :class="`fa-fw fa-${iconType} fa-${icon} fa-fw me-2`"></i>
+    <i v-if="icon" :class="`fa-fw fa-${iconType} fa-${icon} me-2`"></i>
     <span v-text="name"></span>
   </a>
   <a v-else-if="type == 'button'" role="button" ref="action" @click="buttonFunc">
-    <i v-if="icon" :class="`fa-fw fa-${iconType} fa-${icon} fa-fw me-2`"></i>
+    <i v-if="icon" :class="`fa-fw fa-${iconType} fa-${icon} me-2`"></i>
     <span v-text="name"></span>
   </a>
 </template>

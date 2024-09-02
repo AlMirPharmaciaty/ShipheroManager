@@ -53,7 +53,7 @@ class AuthController:
             payload = jwt.decode(jwt=token,
                                  key=SECRET_KEY,
                                  algorithms=[AUTH_ALGORITHM])
-            user_id: str = payload.get("user_id")
+            user_id: int = payload.get("user_id")
             if not user_id:
                 raise credentials_exception
         except InvalidTokenError as e:

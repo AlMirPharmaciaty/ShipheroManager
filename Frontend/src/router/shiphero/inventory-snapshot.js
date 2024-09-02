@@ -5,7 +5,7 @@ export default {
   path: '/inventory-snapshot',
   name: 'inventory-snapshot',
   meta: {
-    title: 'Inventory Snapshot',
+    title: 'Inventory Snapshots',
     icon: 'boxes-stacked',
     layout: MainLayout,
     displayOnNav: true,

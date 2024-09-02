@@ -79,7 +79,7 @@ import { isUserAuthorized } from '@/composables/auth-manager'
 import { fetchData } from '@/composables/data-fetcher'
 
 import deleteUserModal from './DeleteUserModal.vue'
-import UserListUserColView from './UserListUserColView.vue'
+import UserTableView from './UserTableView.vue'
 
 const route = useRoute()
 const routeQuery = route.query
@@ -92,7 +92,7 @@ const columns = [
     label: 'User',
     field: 'user',
     type: 'component',
-    component: UserListUserColView,
+    component: UserTableView,
     sortable: false
   },
   {

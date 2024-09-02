@@ -7,7 +7,7 @@ class PermissionBase(BaseModel):
 
 
 class PermissionRead(PermissionBase):
-    id: str
+    id: int
     created_at: datetime
     updated_at: datetime
 

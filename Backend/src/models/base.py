@@ -11,7 +11,9 @@ class BaseModel(Base):
     "Base database model"
     __abstract__ = True
 
-    id: Mapped[str] = mapped_column(primary_key=True, index=True)
+    id: Mapped[int] = mapped_column(primary_key=True,
+                                    autoincrement=True,
+                                    index=True)
     created_at: Mapped[datetime] = mapped_column(default=func.now())
     updated_at: Mapped[datetime] = mapped_column(default=func.now(),
-                                                  onupdate=func.now())
+                                                 onupdate=func.now())

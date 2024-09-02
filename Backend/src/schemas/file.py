@@ -8,7 +8,7 @@ from src.schemas.custom_response import CustomResponse
 
 class FileBase(BaseModel):
     filename: str = 'example.json'
-    description: str | None = None
+    description: str | None = ''
 
 
 class FileCreate(FileBase):
@@ -16,7 +16,7 @@ class FileCreate(FileBase):
 
 
 class FileRead(FileBase):
-    id: str
+    id: int
     url: str
     created_at: datetime
     updated_at: datetime

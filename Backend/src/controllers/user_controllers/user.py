@@ -3,7 +3,6 @@ from sqlalchemy import func, or_, and_
 from fastapi.encoders import jsonable_encoder
 
 from src.utils.encryption import encrypt
-from src.utils.id_generator import generate_id
 from src.models.user_models.user import User
 from src.models.user_models.role import Role
 from src.models.user_models.user_role import UserRole
@@ -18,7 +17,7 @@ class UserController:
         self.db = db
 
     def read(self,
-             user_id: str = None,
+             user_id: int = None,
              email: str = None,
              exclude_deleted: bool = True):
         """Get a single user"""
@@ -31,7 +30,7 @@ class UserController:
             user = user.filter(User.email == email)
         return user.first()
 
-    def is_email_duplicate(self, email: str, user_id: str | None = None):
+    def is_email_duplicate(self, email: str, user_id: int | None = None):
         """Check whether email already exists"""
         user = self.db.query(User).filter(User.email == email)
         if user_id:
@@ -86,7 +85,6 @@ class UserController:
             if self.is_email_duplicate(email=user.email):
                 raise Exception('Email already exists.')
             user = User(**user.model_dump())
-            user.id = generate_id(db=self.db, prefix="uu", model=User)
             user.password = encrypt(user.password)
             self.db.add(user)
             self.db.commit()
@@ -96,7 +94,7 @@ class UserController:
             self.db.rollback()
             raise Exception(str(e)) from e
 
-    def update(self, user_id: str, new_details: UserUpdateAdmin):
+    def update(self, user_id: int, new_details: UserUpdateAdmin):
         """Update a user details"""
         try:
             exclude_deleted = True
@@ -160,7 +158,7 @@ class UserController:
             self.db.rollback()
             raise Exception(str(e)) from e
 
-    def delete(self, user_id: str):
+    def delete(self, user_id: int):
         """Soft delete a user"""
         try:
             user = self.read(user_id=user_id)

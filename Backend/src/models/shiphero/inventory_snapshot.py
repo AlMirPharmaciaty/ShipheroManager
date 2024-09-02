@@ -30,8 +30,7 @@ class InventorySnapshot(BaseModel):
     enqueued_at: Mapped[Optional[datetime]]
     created_at_shiphero: Mapped[Optional[datetime]]
     updated_at_shiphero: Mapped[Optional[datetime]]
-    downloaded: Mapped[bool] = mapped_column(default=False)
-    user_id: Mapped[str] = mapped_column(ForeignKey(User.id))
-    file_id: Mapped[Optional[str]] = mapped_column(ForeignKey(File.id))
+    user_id: Mapped[int] = mapped_column(ForeignKey(User.id))
+    file_id: Mapped[Optional[int]] = mapped_column(ForeignKey(File.id))
     user = relationship('User')
     file = relationship('File')

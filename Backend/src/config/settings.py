@@ -7,11 +7,6 @@ class Settings(BaseSettings):
     """
     ENV: str = "dev"
     TITLE: str
-    DB_NAME: str
-    DB_USER: str
-    DB_PASSWORD: int
-    DB_PORT: int
-    DB_HOST: str
     DB_URL: str
     SECRET_KEY: str
     AUTH_ALGORITHM: str

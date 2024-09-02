@@ -32,7 +32,7 @@ def create_file(data: FileCreate,
 
 
 @file.get("/")
-def read_file_content(file_id: str,
+def read_file_content(file_id: int,
                       db: Session = Depends(get_db),
                       _=Depends(Authorize(permission="file_read"))):
     """API to read file content"""
@@ -49,7 +49,7 @@ def read_file_content(file_id: str,
 
 
 @file.delete('/', response_model=FileResponseModel)
-def delete_file(file_id: str,
+def delete_file(file_id: int,
                 db: Session = Depends(get_db),
                 _=Depends(Authorize(permission="file_delete"))):
     """API to delete a file by id"""

@@ -1,6 +1,5 @@
 from sqlalchemy.orm import Session
 
-from src.utils.id_generator import generate_id
 from src.schemas.enums import ETLLogProcessessEnum
 from src.models.user_models.user import User
 from src.models.etl_log import ETLLog
@@ -19,11 +18,10 @@ class ETLLogController:
                    process: ETLLogProcessessEnum,
                    success: bool,
                    description: str,
-                   file_id: str | None = None):
+                   file_id: int | None = None):
         """"""
         try:
             log = ETLLog()
-            log.id = generate_id(self.db, 'll', ETLLog)
             log.user_id = self.user.id
             log.process = process
             log.success = success

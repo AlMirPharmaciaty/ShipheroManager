@@ -2,7 +2,6 @@ from fastapi.encoders import jsonable_encoder
 from sqlalchemy.orm import Session
 from sqlalchemy import func, or_, and_
 
-from src.utils.id_generator import generate_id
 from src.models.user_models.role import Role
 from src.models.user_models.permission import Permission
 from src.models.user_models.role_permission import RolePermission
@@ -16,10 +15,10 @@ class RoleController:
     def __init__(self, db: Session):
         self.db = db
 
-    def read(self, role_id: str):
+    def read(self, role_id: int):
         return self.db.query(Role).filter(Role.id == role_id).first()
 
-    def is_role_duplicate(self, role_name: str, role_id: str | None = None):
+    def is_role_duplicate(self, role_name: str, role_id: int | None = None):
         role = self.db.query(Role).filter(Role.name == role_name)
         if role_id:
             role = role.filter(Role.id != role_id)
@@ -96,9 +95,9 @@ class RoleController:
                 raise Exception('Role already exists.')
             role = Role()
             role.name = new_role.name
-            role.id = generate_id(db=self.db, prefix="rr", model=Role)
-            self.update_role_permissions(role=role, new_details=new_role)
             self.db.add(role)
+            self.db.flush()
+            self.update_role_permissions(role=role, new_details=new_role)
             self.db.commit()
             self.db.refresh(role)
             return role
@@ -107,7 +106,7 @@ class RoleController:
             self.db.rollback()
             raise Exception(str(e)) from e
 
-    def update(self, role_id: str, new_details: RoleUpdate):
+    def update(self, role_id: int, new_details: RoleUpdate):
         """Update a role details"""
         try:
             role = self.read(role_id=role_id)
@@ -128,7 +127,7 @@ class RoleController:
             self.db.rollback()
             raise Exception(str(e)) from e
 
-    def delete(self, role_id: str):
+    def delete(self, role_id: int):
         """Permanently delete a role"""
         try:
             role = self.read(role_id=role_id)

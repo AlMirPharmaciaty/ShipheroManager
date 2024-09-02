@@ -11,9 +11,9 @@ class UserRole(Base):
 
     __tablename__ = "user_roles"
 
-    user_id: Mapped[str] = mapped_column(ForeignKey(User.id,
+    user_id: Mapped[int] = mapped_column(ForeignKey(User.id,
                                                     ondelete='CASCADE'),
                                          primary_key=True,)
-    role_id: Mapped[str] = mapped_column(ForeignKey(Role.id,
+    role_id: Mapped[int] = mapped_column(ForeignKey(Role.id,
                                                     ondelete='CASCADE'),
                                          primary_key=True,)

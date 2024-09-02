@@ -16,7 +16,7 @@ class InventorySnapshotCreate(BaseModel):
 
 
 class InventorySnapshotRead(BaseModel):
-    id: str
+    id: int
     created_at: datetime
     updated_at: datetime
     snapshot_id: str
@@ -36,7 +36,6 @@ class InventorySnapshotRead(BaseModel):
     enqueued_at: datetime | None
     created_at_shiphero: datetime | None
     updated_at_shiphero: datetime | None
-    downloaded: bool
 
 
 class InventorySnapshotReadWithRelation(InventorySnapshotRead):

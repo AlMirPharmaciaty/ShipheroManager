@@ -9,6 +9,7 @@
   --color-brand-dark-rgb: 0, 68, 55;
   --mdb-input-focus-border-color: var(--color-brand);
   --mdb-input-focus-label-color: var(--color-brand);
+  --mdb-picker-header-bg: var(--color-brand);
 }
 
 * {

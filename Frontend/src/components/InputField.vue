@@ -40,9 +40,7 @@ const props = defineProps({
 })
 
 onMounted(() => {
-  document.querySelectorAll('[data-mdb-input-init]').forEach((el) => {
-    new mdb.Input(el).init()
-  })
+  new mdb.Input(inputFieldOutline.value).init()
 
   if (props.customAutoCompleteEnabled) {
     const autoComplete = new mdb.Autocomplete(inputFieldOutline.value, {
